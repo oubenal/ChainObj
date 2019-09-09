@@ -8,13 +8,15 @@ namespace ChainObj.UnitTests
         [TestMethod]
         public void TestEmptyDB()
         {
-            using (var db = new Database(Utilities.TempDirPath, true))
+            using (var tmpDir = new TempDirectory())
+            using (var db = new Database(tmpDir.Path, true))
                 Assert.IsNull(db.Get(0));
         }
         [TestMethod]
         public void TestInsertAndRetrieveInDB()
         {
-            using (var db = new Database(Utilities.TempDirPath, true))
+            using (var tmpDir = new TempDirectory())
+            using (var db = new Database(tmpDir.Path, true))
             {
                 db.Put(0, "data");
                 Assert.IsTrue(db.Get(0).Equals("data"));
@@ -23,7 +25,8 @@ namespace ChainObj.UnitTests
         [TestMethod]
         public void TestRetrieveAllSortedInDB()
         {
-            using (var db = new Database(Utilities.TempDirPath, true))
+            using (var tmpDir = new TempDirectory())
+            using (var db = new Database(tmpDir.Path, true))
             {
                 for (var i = 0; i < 21; i++)
                     db.Put(i, $"New block {i}");
@@ -36,7 +39,8 @@ namespace ChainObj.UnitTests
         [TestMethod]
         public void TestRetrieveLastInDB()
         {
-            using (var db = new Database(Utilities.TempDirPath, true))
+            using (var tmpDir = new TempDirectory())
+            using (var db = new Database(tmpDir.Path, true))
             {
                 var lastIndex = 20;
                 for (var i = 0; i <= lastIndex; i++)
