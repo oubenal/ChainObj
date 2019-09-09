@@ -4,18 +4,18 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace ChainObj.UnitTests
 {
     [TestClass]
-    public class UnitTest1
+    public class DatabaseTests
     {
         [TestMethod]
         public void TestEmptyDB()
         {
-            using (var db = new Database($@"C:\temp\{Guid.NewGuid().ToString("n").Substring(0, 8)}", true))
+            using (var db = new Database(Utilities.TempDirPath, true))
                 Assert.IsNull(db.Get(0));
         }
         [TestMethod]
         public void TestInsertAndRetrieveInDB()
         {
-            using (var db = new Database($@"C:\temp\{Guid.NewGuid().ToString("n").Substring(0, 8)}", true))
+            using (var db = new Database(Utilities.TempDirPath, true))
             {
                 db.Put(0, "data");
                 Assert.IsTrue(db.Get(0).Equals("data"));
@@ -24,7 +24,7 @@ namespace ChainObj.UnitTests
         [TestMethod]
         public void TestRetrieveAllSortedInDB()
         {
-            using (var db = new Database($@"C:\temp\{Guid.NewGuid().ToString("n").Substring(0, 8)}", true))
+            using (var db = new Database(Utilities.TempDirPath, true))
             {
                 for (var i = 0; i < 21; i++)
                     db.Put(i, $"New block {i}");
@@ -37,7 +37,7 @@ namespace ChainObj.UnitTests
         [TestMethod]
         public void TestRetrieveLastInDB()
         {
-            using (var db = new Database($@"C:\temp\{Guid.NewGuid().ToString("n").Substring(0, 8)}", true))
+            using (var db = new Database(Utilities.TempDirPath, true))
             {
                 var lastIndex = 20;
                 for (var i = 0; i <= lastIndex; i++)
