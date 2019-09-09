@@ -6,11 +6,11 @@ namespace ChainObj
 {
     class Blockchain
     {
-        private readonly string dbPath;
-        private IDatabase DBFactory(bool createIfMissing) => new Database(dbPath, createIfMissing);
+        internal string DbPath { get; }
+        private IDatabase DBFactory(bool createIfMissing) => new Database(DbPath, createIfMissing);
         internal Blockchain(string dbPath = @"C:\temp\tempdb")
         {
-            this.dbPath = dbPath;
+            DbPath = dbPath;
             using (var db = DBFactory(true))
             {
                 var res = db.GetLast();
@@ -46,18 +46,15 @@ namespace ChainObj
         }
         internal bool IsValidChain()
         {
-            using (var db = DBFactory(false))
+            var blocks = GetAll();
+            var it = blocks.GetEnumerator();
+            if (!it.MoveNext()) return false;
+            var currBlock = it.Current;
+            while (it.MoveNext())
             {
-                var listBlock = db.All().Select(_ => new Block(_));
-                var it = listBlock.GetEnumerator();
-                if (!it.MoveNext()) return false;
-                var currBlock = it.Current;
-                while(it.MoveNext())
-                {
-                    var prevBlock = currBlock;
-                    currBlock = it.Current;
-                    if (currBlock.PreviousHash != prevBlock.Hash) return false;
-                }
+                var prevBlock = currBlock;
+                currBlock = it.Current;
+                if (currBlock.PreviousHash != prevBlock.Hash) return false;
             }
             return true;
         }
