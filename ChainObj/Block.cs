@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
 using Newtonsoft.Json.Linq;
 
 namespace ChainObj
@@ -9,12 +10,6 @@ namespace ChainObj
     [DebuggerDisplay("{Height}, {Data}, {CommitDate.ToString()}")]
     class Block
     {
-        private static string GetHash(string input)
-        {
-            var hash = new System.Security.Cryptography.SHA1Managed().ComputeHash(Encoding.UTF8.GetBytes(input));
-            return string.Concat(hash.Select(_ => _.ToString("x2")));
-        }
-
         public int Height { get;  set; }
         public string PreviousHash { get;  set; }
         public string Hash { get; }
@@ -35,7 +30,7 @@ namespace ChainObj
         {
             Height = height;
             PreviousHash = previousHash;
-            Hash = GetHash(data);
+            Hash = data.GetSha1();
             CommitDate = DateTime.Now;
             Data = data;
         }

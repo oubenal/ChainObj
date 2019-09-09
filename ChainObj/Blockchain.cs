@@ -6,14 +6,11 @@ namespace ChainObj
 {
     class Blockchain
     {
-        private IDatabase DBFactory(bool createIfMissing) => new Database(createIfMissing);
-        Block LastBlock { get; }
-        private Blockchain(Block block)
+        private readonly string dbPath;
+        private IDatabase DBFactory(bool createIfMissing) => new Database(dbPath, createIfMissing);
+        internal Blockchain(string dbPath = @"C:\temp\tempdb")
         {
-            LastBlock = block;
-        }
-        internal Blockchain()
-        {
+            this.dbPath = dbPath;
             using (var db = DBFactory(true))
             {
                 var res = db.GetLast();
@@ -26,16 +23,21 @@ namespace ChainObj
             }
             
         }
-        int Height => LastBlock.Height;
-        internal Blockchain InsertBlock(string data)
+        internal Block LastBlock { get; private set; }
+        internal void InsertBlock(string data)
         {
             using (var db = DBFactory(true))
             {
-                var newBlock = new Block(Height + 1, LastBlock.Hash, data);
+                var newBlock = new Block(LastBlock.Height + 1, LastBlock.Hash, data);
                 db.Put(newBlock.Height, JsonConvert.SerializeObject(newBlock));
-                return new Blockchain(newBlock);
+                LastBlock = newBlock;
             }
             
+        }
+        internal Block GetBlock(int height)
+        {
+            using (var db = DBFactory(false))
+                return new Block(db.Get(height));
         }
         internal List<Block> GetAll()
         {

@@ -6,9 +6,9 @@ namespace ChainObj
     {
         static void Main(string[] args)
         {
-            var blockchain = new Blockchain();
+            var blockchain = new Blockchain(@"C:\temp\blockchain");
             for(var i=1; i<21; i++)
-                blockchain = blockchain.InsertBlock($"New block {i}");
+                blockchain.InsertBlock($"New block {i}");
             var valid = blockchain.IsValidChain();
             var blocks = blockchain.GetAll();
         }
