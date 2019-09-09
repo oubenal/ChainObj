@@ -1,27 +1,20 @@
 ﻿using System;
 using System.Diagnostics;
-using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace ChainObj
 {
     [DebuggerDisplay("{Height}, {Data}, {CommitDate.ToString()}")]
     class Block
     {
-        public int Height { get;  set; }
-        public string PreviousHash { get;  set; }
+        public int Height { get; }
+        public string PreviousHash { get; }
         public string Hash { get; }
-        public DateTime CommitDate { get;  set; }
-        public string Data { get;  set; }
-
-        public Block (string json)
+        public DateTime CommitDate { get; }
+        public string Data { get; }
+        public static implicit operator Block(string json)
         {
-            if (string.IsNullOrEmpty(json)) throw new ArgumentException("null or empty string");
-            JToken token = JObject.Parse(json);
-            Height = (int)token.SelectToken("Height");
-            PreviousHash = (string)token.SelectToken("PreviousHash");
-            Hash = (string)token.SelectToken("Hash");
-            CommitDate = (DateTime)token.SelectToken("CommitDate");
-            Data = (string)token.SelectToken("Data");
+            return JsonConvert.DeserializeObject<Block>(json);
         }
         public Block(int height, string previousHash, string data)
         {

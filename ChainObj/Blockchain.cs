@@ -19,7 +19,7 @@ namespace ChainObj
                     db.Put(0, JsonConvert.SerializeObject(new Block(0, null, "GenesisBlock")));
                     res = db.Get(0);
                 }
-                LastBlock = new Block(res);
+                LastBlock = res;
             }
             
         }
@@ -37,12 +37,12 @@ namespace ChainObj
         internal Block GetBlock(int height)
         {
             using (var db = DBFactory(false))
-                return new Block(db.Get(height));
+                return db.Get(height);
         }
         internal List<Block> GetAll()
         {
             using (var db = DBFactory(false))
-                return db.All().Select(_ => new Block(_)).ToList();
+                return db.All().Select(json => (Block)json).ToList();
         }
         internal bool IsValidChain()
         {
