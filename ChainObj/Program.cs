@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace ChainObj
+﻿namespace ChainObj
 {
     class Program
     {
