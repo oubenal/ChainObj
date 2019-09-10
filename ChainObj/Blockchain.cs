@@ -38,32 +38,23 @@ namespace ChainObj
         internal Block<T> GetBlock(int height)
         {
             using (var db = DBFactory(false))
-                return db.Get(height);
+                return db.Get(height) ?? throw new KeyNotFoundException("height not found");
         }
-        internal List<Block<T>> GetAll()
+        internal Block<T> GetBlockByHash(string hash)
         {
             using (var db = DBFactory(false))
-                return db.All().Select(json => (Block<T>)json).ToList();
+                return db.All().FirstOrDefault(_ => ((Block<T>)_).Hash == hash) ?? throw new KeyNotFoundException("hash not found");
         }
         internal bool IsValidChain()
         {
-            var blocks = GetAll();
-            var it = blocks.GetEnumerator();
-            if (!it.MoveNext()) return false;
-            var currBlock = it.Current;
-            if (currBlock.GetSha1() == currBlock.Hash) return false;
-            while (it.MoveNext())
+            for(int i = 0; i < LastBlock.Height; i++)
             {
-                var prevBlock = currBlock;
-                currBlock = it.Current;
-                if (currBlock.PreviousHash != prevBlock.Hash && currBlock.GetSha1() == currBlock.Hash)
+                var lBlock = GetBlock(i);
+                var rBlock = GetBlock(i + 1);
+                if (lBlock.Hash != rBlock.PreviousHash && lBlock.GetSha1() != lBlock.Hash)
                     return false;
             }
             return true;
-        }
-        public override string ToString()
-        {
-            return string.Concat(Environment.NewLine, GetAll());
         }
     }
 }

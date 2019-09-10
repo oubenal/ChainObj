@@ -8,7 +8,7 @@
             for(var i=1; i<21; i++)
                 blockchain.AddBlock($"New block {i}");
             var valid = blockchain.IsValidChain();
-            var blocks = blockchain.GetAll();
+            var block = blockchain.GetBlockByHash(blockchain.GetBlock(10).Hash);
         }
     }
     class MyData : System.IEquatable<MyData>

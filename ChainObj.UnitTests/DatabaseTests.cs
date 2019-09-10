@@ -28,7 +28,7 @@ namespace ChainObj.UnitTests
             using (var tmpDir = new TempDirectory())
             using (var db = new Database(tmpDir.Path, true))
             {
-                for (var i = 0; i < 21; i++)
+                for (var i = 0; i < 5; i++)
                     db.Put(i, $"New block {i}");
                 var listElmt = db.All();
                 var ind = 0;
@@ -42,12 +42,19 @@ namespace ChainObj.UnitTests
             using (var tmpDir = new TempDirectory())
             using (var db = new Database(tmpDir.Path, true))
             {
-                var lastIndex = 20;
+                var lastIndex = 5;
                 for (var i = 0; i <= lastIndex; i++)
                     db.Put(i, $"New block {i}");
                 var lastElmt = db.GetLast();
                 Assert.IsTrue(lastElmt.Equals($"New block {lastIndex}"));
             }
+        }
+        [TestMethod]
+        public void TestRetrieveNonExistingElement()
+        {
+            using (var tmpDir = new TempDirectory())
+            using (var db = new Database(tmpDir.Path, true))
+                Assert.IsNull(db.Get(-1));
         }
     }
 }

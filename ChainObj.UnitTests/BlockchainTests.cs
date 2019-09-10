@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace ChainObj.UnitTests
@@ -60,6 +61,43 @@ namespace ChainObj.UnitTests
                 Assert.AreEqual(1, block.Height);
                 Assert.AreEqual(blockchain.LastBlock.PreviousHash, block.Hash);
                 Assert.IsTrue(data1.Equals(block.Data));
+            }
+        }
+        [TestMethod]
+        public void TestGetBlockInvalid()
+        {
+            using (var tmpDir = new TempDirectory())
+            {
+                var blockchain = new Blockchain<Mock>(tmpDir.Path);
+                Assert.ThrowsException<KeyNotFoundException>(() => blockchain.GetBlock(-1));
+                Assert.AreEqual(0, blockchain.LastBlock.Height);
+            }
+        }
+        [TestMethod]
+        public void TestGetBlockByHash()
+        {
+            using (var tmpDir = new TempDirectory())
+            {
+                var blockchain = new Blockchain<Mock>(tmpDir.Path);
+                var data1 = new Mock("New data 1");
+                var data2 = new Mock("New data 2");
+                blockchain.AddBlock(data1);
+                blockchain.AddBlock(data2);
+                var block = blockchain.GetBlockByHash(data1.GetSha1());
+                Assert.AreEqual(1, block.Height);
+                Assert.AreEqual(blockchain.LastBlock.PreviousHash, block.Hash);
+                Assert.IsTrue(data1.Equals(block.Data));
+            }
+        }
+        [TestMethod]
+        public void TestGetBlockByHashInvalid()
+        {
+            using (var tmpDir = new TempDirectory())
+            {
+                var blockchain = new Blockchain<Mock>(tmpDir.Path);
+                var data = new Mock("New data");
+                Assert.ThrowsException<KeyNotFoundException>(() => blockchain.GetBlockByHash(data.GetSha1()));
+                Assert.AreEqual(0, blockchain.LastBlock.Height);
             }
         }
         [TestMethod]
