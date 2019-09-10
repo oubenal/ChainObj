@@ -25,7 +25,7 @@ namespace ChainObj
             
         }
         internal Block<T> LastBlock { get; private set; }
-        internal void InsertBlock(T data)
+        internal void AddBlock(T data)
         {
             using (var db = DBFactory(true))
             {

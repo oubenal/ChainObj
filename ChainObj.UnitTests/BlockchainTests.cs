@@ -40,7 +40,7 @@ namespace ChainObj.UnitTests
             {
                 var blockchain = new Blockchain<Mock>(tmpDir.Path);
                 var data = new Mock("New data 1");
-                blockchain.InsertBlock(data);
+                blockchain.AddBlock(data);
                 Assert.AreEqual(1, blockchain.LastBlock.Height);
                 Assert.IsNotNull(blockchain.LastBlock.PreviousHash);
                 Assert.IsTrue(data.Equals(blockchain.LastBlock.Data));
@@ -54,8 +54,8 @@ namespace ChainObj.UnitTests
                 var blockchain = new Blockchain<Mock>(tmpDir.Path);
                 var data1 = new Mock("New data 1");
                 var data2 = new Mock("New data 2");
-                blockchain.InsertBlock(data1);
-                blockchain.InsertBlock(data2);
+                blockchain.AddBlock(data1);
+                blockchain.AddBlock(data2);
                 var block = blockchain.GetBlock(1);
                 Assert.AreEqual(1, block.Height);
                 Assert.AreEqual(blockchain.LastBlock.PreviousHash, block.Hash);
@@ -71,9 +71,9 @@ namespace ChainObj.UnitTests
                 var data1 = new Mock("New data 1");
                 var data2 = new Mock("New data 2");
                 var data3 = new Mock("New data 3");
-                blockchain.InsertBlock(data1);
-                blockchain.InsertBlock(data2);
-                blockchain.InsertBlock(data3);
+                blockchain.AddBlock(data1);
+                blockchain.AddBlock(data2);
+                blockchain.AddBlock(data3);
 
                 Assert.IsTrue(blockchain.IsValidChain());
             }
@@ -87,9 +87,9 @@ namespace ChainObj.UnitTests
                 var data1 = new Mock("New data 1");
                 var data2 = new Mock("New data 2");
                 var data3 = new Mock("New data 3");
-                blockchain.InsertBlock(data1);
-                blockchain.InsertBlock(data2);
-                blockchain.InsertBlock(data3);
+                blockchain.AddBlock(data1);
+                blockchain.AddBlock(data2);
+                blockchain.AddBlock(data3);
 
                 var cpyBlockchain = new Blockchain<Mock>(blockchain.DbPath);
                 Assert.AreEqual(3, cpyBlockchain.LastBlock.Height);

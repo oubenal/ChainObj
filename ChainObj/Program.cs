@@ -6,7 +6,7 @@
         {
             var blockchain = new Blockchain<MyData>(@"C:\temp\blockchain");
             for(var i=1; i<21; i++)
-                blockchain.InsertBlock($"New block {i}");
+                blockchain.AddBlock($"New block {i}");
             var valid = blockchain.IsValidChain();
             var blocks = blockchain.GetAll();
         }
