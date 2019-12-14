@@ -1,16 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VaultPath>$(MSBuildProjectDirectory)\..\Build\Config</VaultPath>
-    <BuildPath>$(SolutionDir)\_temp</BuildPath>
-    <BinPath>$(BuildPath)\bin\$(Configuration)_$(Platform)\$(MSBuildProjectName)</BinPath>
-    <ObjPath>$(BuildPath)\obj\$(Configuration)_$(Platform)\$(MSBuildProjectName)</ObjPath>
   </PropertyGroup>
-
-  <PropertyGroup>
-    <OutputPath>$(BinPath)</OutputPath>
-    <IntermediateOutputPath>$(ObjPath)</IntermediateOutputPath>
-  </PropertyGroup>
-
+  
   <PropertyGroup>
     <TargetFrameworks>netcoreapp2.1;net472</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>

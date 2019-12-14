@@ -1,14 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VaultPath>$(MSBuildProjectDirectory)\..\..\Config</VaultPath>
-    <BuildPath>$(SolutionDir)\_temp</BuildPath>
-    <BinPath>$(BuildPath)\bin\$(Configuration)_$(Platform)\$(MSBuildProjectName)</BinPath>
-    <ObjPath>$(BuildPath)\obj\$(Configuration)_$(Platform)\$(MSBuildProjectName)</ObjPath>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <OutputPath>$(BinPath)</OutputPath>
-    <IntermediateOutputPath>$(ObjPath)</IntermediateOutputPath>
   </PropertyGroup>
   
   <PropertyGroup>
