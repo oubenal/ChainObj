@@ -10,6 +10,7 @@ namespace ReReportTransformer
   {
     static void Main(string[] args)
     {
+      Console.Out.WriteLine($"Current Folder: {Environment.CurrentDirectory}");
     }
   }
 }
