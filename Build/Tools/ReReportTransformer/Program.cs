@@ -35,6 +35,9 @@ namespace ReReportTransformer
         {
           InspectCodeReport report = new InspectCodeReport(reportPath);
           var filteredReport = report.FilterGlobal();
+
+          var reportDir = System.IO.Path.GetDirectoryName(reportPath);
+          System.IO.File.WriteAllText($@"{reportDir}\filter-report.xml", filteredReport.ToString());
           return 0;
         }
 
