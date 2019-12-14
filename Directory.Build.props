@@ -7,5 +7,6 @@
   <PropertyGroup>
     <OutputPath>$(BinPath)</OutputPath>
     <IntermediateOutputPath>$(ObjPath)</IntermediateOutputPath>
+    <MSBuildProjectExtensionsPath>$(ObjPath)</MSBuildProjectExtensionsPath>
   </PropertyGroup>
 </Project>
