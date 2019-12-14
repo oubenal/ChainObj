@@ -1,9 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <VaultPath>$(MSBuildProjectDirectory)\..\Build\Config</VaultPath>
+    <BuildPath>$(SolutionDir)\_temp</BuildPath>
+    <BinPath>$(BuildPath)\bin\$(Configuration)_$(Platform)\$(MSBuildProjectName)</BinPath>
+    <ObjPath>$(BuildPath)\obj\$(Configuration)_$(Platform)\$(MSBuildProjectName)</ObjPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputPath>$(BinPath)</OutputPath>
+    <IntermediateOutputPath>$(ObjPath)</IntermediateOutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-	<SignAssembly>true</SignAssembly>
-	<AssemblyOriginatorKeyFile>ouben.snk</AssemblyOriginatorKeyFile>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>$(VaultPath)\ouben.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   
   <ItemGroup>
