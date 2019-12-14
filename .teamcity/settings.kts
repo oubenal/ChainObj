@@ -1,6 +1,7 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.dotnetBuild
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.dotnetTest
+import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.exec
 import jetbrains.buildServer.configs.kotlin.v2019_2.buildSteps.powerShell
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.finishBuildTrigger
 import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
@@ -145,8 +146,12 @@ object Compilation : BuildType({
 object Report : BuildType({
     name = "Report"
 
+    buildNumberPattern = "%BuildNumber%"
+
     params {
         param("REPORT_PATH", "${CodeInspection.depParamRefs["RESULT_PATH"]}")
+        param("BuildNumber", "${CodeInspection.depParamRefs["BuildNumber"]}")
+        param("TOOL_DIR", ".bin/ReportTransformer/")
     }
 
     vcs {
@@ -168,6 +173,12 @@ object Report : BuildType({
             }
             param("jetbrains_powershell_scriptArguments", "-reportPath:%REPORT_PATH%")
         }
+        exec {
+            name = "Filter report"
+            path = """%TOOL_DIR%\ReReportTransformer.exe"""
+            arguments = "%REPORT_PATH%"
+            param("script.content", "%TOOL_DIR%/ReReportTransformer.exe %REPORT_PATH%")
+        }
     }
 
     dependencies {
@@ -180,6 +191,9 @@ object Report : BuildType({
                 cleanDestination = true
                 artifactRules = "inspections.xml=>${CodeInspection.depParamRefs["RESULT_DIR"]}"
             }
+        }
+        artifacts(Compilation) {
+            artifactRules = "bin.zip!/ReReportTransformer/net472/ => %TOOL_DIR%"
         }
     }
 })
