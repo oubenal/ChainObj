@@ -39,6 +39,7 @@ project {
     buildType(CodeInspection)
     buildType(Compilation)
     buildType(Report)
+    buildType(WorkflowStatus)
 }
 
 object CodeInspection : BuildType({
@@ -231,6 +232,21 @@ object TestSolution : BuildType({
     dependencies {
         snapshot(Compilation) {
             onDependencyFailure = FailureAction.FAIL_TO_START
+        }
+    }
+})
+
+object WorkflowStatus : BuildType({
+    name = "Workflow Status"
+
+    vcs {
+        root(ChainObjVcs)
+    }
+
+    dependencies {
+        snapshot(Report) {
+        }
+        snapshot(TestSolution) {
         }
     }
 })
