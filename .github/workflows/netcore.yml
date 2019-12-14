@@ -19,4 +19,4 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release --framework netcoreapp2.1
     - name: Test with dotnet
-      run: dotnet test --logger:trx
+      run: dotnet test --logger:trx --framework netcoreapp2.1
