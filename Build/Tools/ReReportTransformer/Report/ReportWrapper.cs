@@ -2,11 +2,13 @@
 using System.Linq;
 using System.Collections.Immutable;
 using System.Xml;
+using log4net;
 
 namespace ReReportTransformer.Report
 {
   class InspectCodeReport
   {
+    private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     private InspectCodeReport(ImmutableList<IssueType> issueTypes, ImmutableList<Project> projectsWithIssues)
     {
       IssueTypes = issueTypes;
@@ -35,7 +37,13 @@ namespace ReReportTransformer.Report
     internal InspectCodeReport FilterGlobal()
     {
       return new InspectCodeReport(
-          IssueTypes.Where(it => !it.CheckIfGlobal()).ToImmutableList(),
+          IssueTypes.Where(issueType =>
+          {
+            bool isGlobal = issueType.CheckIfGlobal();
+            if (isGlobal)
+              log.Debug($"Filtering Issues with id '{issueType.Id}' ");
+            return !isGlobal;
+          }).ToImmutableList(),
           ProjectsWithIssues.Select(p => p.FilterGlobal()).Where(p => p != null).ToImmutableList());
     }
     public override string ToString()
