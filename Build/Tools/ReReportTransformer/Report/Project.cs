@@ -51,5 +51,9 @@ namespace ReReportTransformer.Report
         yield return new Project(node);
       }
     }
+    public override string ToString()
+    {
+      return $@"<Project Name=""{Name}"">{string.Join("", Issues)}</Project>";
+    }
   }
 }

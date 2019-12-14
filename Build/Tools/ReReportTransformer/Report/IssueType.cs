@@ -68,5 +68,9 @@ namespace ReReportTransformer.Report
       hashCode = hashCode * -1521134295 + Severity.GetHashCode();
       return hashCode;
     }
+    public override string ToString()
+    {
+      return $@"<IssueType Id=""{Id}"" Severity=""{Severity}"" />";
+    }
   }
 }

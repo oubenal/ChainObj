@@ -38,5 +38,9 @@ namespace ReReportTransformer.Report
           IssueTypes.Where(it => !it.CheckIfGlobal()).ToImmutableList(),
           ProjectsWithIssues.Select(p => p.FilterGlobal()).Where(p => p != null).ToImmutableList());
     }
+    public override string ToString()
+    {
+      return $@"<Report><IssueTypes>{string.Join("", IssueTypes)}</IssueTypes><Issues>{string.Join("", ProjectsWithIssues)}</Issues></Report>";
+    }
   }
 }

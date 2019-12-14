@@ -29,5 +29,9 @@ namespace ReReportTransformer.Report
     {
       return Regex.Match(TypeId, @".Global$").Success;
     }
+    public override string ToString()
+    {
+      return $@"<Issue TypeId=""{TypeId}"" File=""{File}"" Offset=""{Offset}"" Line=""{Line}"" Message=""{Message}"" />";
+    }
   }
 }

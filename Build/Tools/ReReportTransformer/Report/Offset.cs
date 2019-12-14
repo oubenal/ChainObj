@@ -27,6 +27,10 @@ namespace ReReportTransformer.Report
     {
       return Start.GetHashCode().ShiftAndWrap(2) ^ End.GetHashCode();
     }
+    public override string ToString()
+    {
+      return $@"{Start}-{End}";
+    }
   }
 
   internal static class Utilities
