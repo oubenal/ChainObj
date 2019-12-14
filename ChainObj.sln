@@ -3,9 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29201.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainObj", "ChainObj\ChainObj.csproj", "{6EB0714C-3409-4272-8618-580F601DDF35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainObj", "ChainObj\ChainObj.csproj", "{6EB0714C-3409-4272-8618-580F601DDF35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChainObj.UnitTests", "ChainObj.UnitTests\ChainObj.UnitTests.csproj", "{2E7BDB62-1737-4323-96D5-210E7511E4EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChainObj.UnitTests", "ChainObj.UnitTests\ChainObj.UnitTests.csproj", "{2E7BDB62-1737-4323-96D5-210E7511E4EC}"
+EndProject
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,10 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <VaultPath>$(MSBuildProjectDirectory)\..\Build\Config</VaultPath>
+  </PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
 	<OutputType>Exe</OutputType>
 	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
 	<SignAssembly>true</SignAssembly>
-	<AssemblyOriginatorKeyFile>ouben.snk</AssemblyOriginatorKeyFile>
+	<AssemblyOriginatorKeyFile>$(VaultPath)\ouben.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   
   <ItemGroup>
