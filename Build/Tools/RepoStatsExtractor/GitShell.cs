@@ -13,7 +13,7 @@ namespace RepoStatsExtractor
     private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     private List<string> RunCommand(string arguments)
     {
-      log.Debug($@"Git repository ""{RepositoryDir.Name}""");
+      log.Info($@"Git repository ""{RepositoryDir.FullName}""");
       using (var process = new Process())
       {
         string errorOutput = null;
@@ -29,8 +29,8 @@ namespace RepoStatsExtractor
         };
         process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => errorOutput += e.Data);
 
-        var outputStr = new List<string> { "" };
-        log.Debug($@"will run  ""git {arguments}""");
+        var outputStr = new List<string> { };
+        log.Info($@"will run  ""git {arguments}""");
         process.Start();
         process.BeginErrorReadLine();
         while (!process.StandardOutput.EndOfStream)
