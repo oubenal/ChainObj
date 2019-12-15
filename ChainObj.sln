@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{B90150C7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{2A563B43-A59E-4F29-B0DD-564DB684D64F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepoStatsExtractor", "Build\Tools\RepoStatsExtractor\RepoStatsExtractor.csproj", "{203F55E1-3566-4F4A-80B3-40D231113AA6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{AAE54F22-63FF-44B3-86F8-765C37D20388}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AAE54F22-63FF-44B3-86F8-765C37D20388}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AAE54F22-63FF-44B3-86F8-765C37D20388}.Release|Any CPU.Build.0 = Release|Any CPU
+		{203F55E1-3566-4F4A-80B3-40D231113AA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{203F55E1-3566-4F4A-80B3-40D231113AA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{203F55E1-3566-4F4A-80B3-40D231113AA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{203F55E1-3566-4F4A-80B3-40D231113AA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -38,6 +44,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AAE54F22-63FF-44B3-86F8-765C37D20388} = {2A563B43-A59E-4F29-B0DD-564DB684D64F}
 		{2A563B43-A59E-4F29-B0DD-564DB684D64F} = {B90150C7-2486-4D32-AC6A-1D98BF0CD79B}
+		{203F55E1-3566-4F4A-80B3-40D231113AA6} = {2A563B43-A59E-4F29-B0DD-564DB684D64F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7A849B51-6722-443D-8A9F-260B94AED677}
