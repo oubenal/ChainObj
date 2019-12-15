@@ -11,7 +11,7 @@ namespace RepoStatsExtractor
   {
     static async Task Main(string[] args)
     {
-      var gitShell = new GitShell(@"C:\RandD\dotnet-standard");
+      var gitShell = new GitShell(@"C:\RandD\dotnet-BuildPerformanceTestAssets");
       gitShell.ShowVersion();
       //var commits = CommitInfo.ParseGitShellResult(gitShell.GetAllCommitStats());
 
