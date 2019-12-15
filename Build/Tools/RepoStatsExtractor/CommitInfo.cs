@@ -20,6 +20,11 @@ namespace RepoStatsExtractor
     internal int FilesChanged { get; }
     internal int Insertions { get; }
     internal int Deletions { get; }
+    internal int PullRequest { get; private set; }
+    internal void SetPullRequest(int number)
+    {
+      PullRequest = number;
+    }
 
     public const string PRETTY_FORMAT = "%H;%an;%ae;%ad;%cn;%ce;%cd;%d";
     public const string DATE_FORMAT = "ddd MMM d HH:mm:ss yyyy K";
@@ -62,14 +67,13 @@ namespace RepoStatsExtractor
 
       return new CommitInfo(commitHash, authorName, authorEmail, authorDate, committerName, committerEmail, committerDate, filesChanged, insertions, deletions);
     }
-
     public static DateTime GitDefaultTime(string date)
     {
       DateTime.TryParseExact(date, DATE_FORMAT, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var authorDate);
       return authorDate;
     }
 
-    internal static List<CommitInfo> ParseGitShellResult(List<string> results)
+    internal static List<CommitInfo> ParseGitShellResult(List<string> results, Dictionary<string, (Octokit.PullRequest PullRequest, IReadOnlyList<Octokit.PullRequestReview> Reviews)> mergedPullRequest)
     {
       var commits = new List<CommitInfo>(results.Count / 2);
       for (int i = 0; i < results.Count; i++)
@@ -77,11 +81,17 @@ namespace RepoStatsExtractor
         if (!results[i + 1].StartsWith(" ")) // merge commit
         {
           log.Debug($"No diff in commit sha1:{results[i].Split(';').First()}");
-          commits.Add(Parse(results[i]));
+          var commit = Parse(results[i]);
+          if (mergedPullRequest.TryGetValue(commit.CommitHash, out var pr))
+            commit.SetPullRequest(pr.PullRequest.Number);
+          commits.Add(commit);
         }
         else
         {
-          commits.Add(Parse(results[i], results[i + 1]));
+          var commit = Parse(results[i], results[i + 1]);
+          if (mergedPullRequest.TryGetValue(commit.CommitHash, out var pr))
+            commit.SetPullRequest(pr.PullRequest.Number);
+          commits.Add(commit);
           i++;
         }
       }
