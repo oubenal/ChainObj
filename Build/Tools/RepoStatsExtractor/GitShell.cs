@@ -74,9 +74,15 @@ namespace RepoStatsExtractor
       };
       var results = RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
       var commits = new List<CommitInfo>(results.Count / 2);
-      for (int i = 0; i < results.Count / 2; i++)
+      for (int i = 0; i < results.Count; i++)
       {
-        commits.Add(new CommitInfo(results[2 * i], results[2 * i + 1]));
+        if (!results[i + 1].StartsWith(" "))
+        {
+          log.Warn($"No diff in commit sha1:{results[i].Split(';').First()}");
+          continue;
+        }
+        commits.Add(new CommitInfo(results[i], results[i + 1]));
+        i++;
       }
       return commits;
     }
