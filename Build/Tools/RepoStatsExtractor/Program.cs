@@ -12,6 +12,7 @@ namespace RepoStatsExtractor
     {
       var gitShell = new GitShell(@"C:\RandD\roslyn");
       gitShell.ShowVersion();
+      gitShell.GetAllCommitStats();
     }
   }
 }

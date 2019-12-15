@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using log4net;
 
 namespace RepoStatsExtractor
 {
   internal class GitShell
   {
-    private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);    
+    private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     private List<string> RunCommand(string arguments)
     {
       log.Debug($@"Git repository ""{RepositoryDir.Name}""");
@@ -60,5 +62,23 @@ namespace RepoStatsExtractor
         "--version"
       };
       RunCommand(string.Join(" ", arguments));
+    }
+    internal List<CommitInfo> GetAllCommitStats()
+    {
+      var arguments = new[] {
+        "log",
+        $@"--pretty=""format:{CommitInfo.PRETTY_FORMAT}""",
+        @"--shortstat",
+        //@"--since=48.hour",
+        @"--no-merges"
+      };
+      var results = RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+      var commits = new List<CommitInfo>(results.Count / 2);
+      for (int i = 0; i < results.Count / 2; i++)
+      {
+        commits.Add(new CommitInfo(results[2 * i], results[2 * i + 1]));
+      }
+      return commits;
+    }
   }
 }
