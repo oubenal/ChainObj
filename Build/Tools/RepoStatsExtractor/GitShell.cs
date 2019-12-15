@@ -8,7 +8,7 @@ using log4net;
 
 namespace RepoStatsExtractor
 {
-  internal class GitShell
+  internal class GitShell : IGitShell
   {
     private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     private List<string> RunCommand(string arguments)
@@ -56,14 +56,14 @@ namespace RepoStatsExtractor
     }
     public DirectoryInfo RepositoryDir { get; }
 
-    internal void ShowVersion()
+    public void ShowVersion()
     {
       var arguments = new[] {
         "--version"
       };
       RunCommand(string.Join(" ", arguments));
     }
-    internal List<string> GetAllCommitStats()
+    public List<string> GetAllCommitStats()
     {
       var arguments = new[] {
         "log",
@@ -75,5 +75,10 @@ namespace RepoStatsExtractor
       };
       return RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
     }
+  }
+  internal interface IGitShell
+  {
+    void ShowVersion();
+    List<string> GetAllCommitStats();
   }
 }
