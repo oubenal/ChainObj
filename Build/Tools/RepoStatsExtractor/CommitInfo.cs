@@ -73,8 +73,9 @@ namespace RepoStatsExtractor
       return authorDate;
     }
 
-    internal static List<CommitInfo> ParseGitShellResult(List<string> results, Dictionary<string, (Octokit.PullRequest PullRequest, IReadOnlyList<Octokit.PullRequestReview> Reviews)> mergedPullRequest)
+    internal static List<CommitInfo> ParseGitShellResult(List<string> results, Dictionary<string, (Octokit.PullRequest PullRequest, IReadOnlyList<Octokit.PullRequestReview> Reviews)> mergedPullRequest = null)
     {
+      mergedPullRequest = mergedPullRequest ?? new Dictionary<string, (Octokit.PullRequest PullRequest, IReadOnlyList<Octokit.PullRequestReview> Reviews)>();
       var commits = new List<CommitInfo>(results.Count / 2);
       for (int i = 0; i < results.Count; i++)
       {
