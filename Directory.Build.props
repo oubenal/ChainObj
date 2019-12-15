@@ -9,4 +9,7 @@
     <IntermediateOutputPath>$(ObjPath)</IntermediateOutputPath>
     <MSBuildProjectExtensionsPath>$(ObjPath)</MSBuildProjectExtensionsPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
 </Project>
