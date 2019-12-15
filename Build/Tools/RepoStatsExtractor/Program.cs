@@ -12,7 +12,7 @@ namespace RepoStatsExtractor
     {
       var gitShell = new GitShell(@"C:\RandD\dotnet-standard");
       gitShell.ShowVersion();
-      var commits = gitShell.GetAllCommitStats();
+      var commits = CommitInfo.ParseGitShellResult(gitShell.GetAllCommitStats());
     }
   }
 }

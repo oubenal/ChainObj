@@ -63,7 +63,7 @@ namespace RepoStatsExtractor
       };
       RunCommand(string.Join(" ", arguments));
     }
-    internal List<CommitInfo> GetAllCommitStats()
+    internal List<string> GetAllCommitStats()
     {
       var arguments = new[] {
         "log",
@@ -73,21 +73,7 @@ namespace RepoStatsExtractor
         //@"--no-merges",
         //@"--first-parent"
       };
-      var results = RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-      var commits = new List<CommitInfo>(results.Count / 2);
-      for (int i = 0; i < results.Count; i++)
-      {
-        if (!results[i + 1].StartsWith(" ")) // merge commit
-        {
-          log.Debug($"No diff in commit sha1:{results[i].Split(';').First()}");
-          commits.Add(new CommitInfo(results[i]));
-        } else
-        {
-          commits.Add(new CommitInfo(results[i], results[i + 1]));
-          i++;
-        }
-      }
-      return commits;
+      return RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
     }
   }
 }
