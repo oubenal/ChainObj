@@ -8,12 +8,12 @@ using log4net;
 
 namespace RepoStatsExtractor
 {
-  internal class GitShell
+  internal class GitShell : IGitShell
   {
     private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
     private List<string> RunCommand(string arguments)
     {
-      log.Debug($@"Git repository ""{RepositoryDir.Name}""");
+      log.Info($@"Git repository ""{RepositoryDir.FullName}""");
       using (var process = new Process())
       {
         string errorOutput = null;
@@ -29,8 +29,8 @@ namespace RepoStatsExtractor
         };
         process.ErrorDataReceived += new DataReceivedEventHandler((sender, e) => errorOutput += e.Data);
 
-        var outputStr = new List<string> { "" };
-        log.Debug($@"will run  ""git {arguments}""");
+        var outputStr = new List<string> { };
+        log.Info($@"will run  ""git {arguments}""");
         process.Start();
         process.BeginErrorReadLine();
         while (!process.StandardOutput.EndOfStream)
@@ -56,29 +56,29 @@ namespace RepoStatsExtractor
     }
     public DirectoryInfo RepositoryDir { get; }
 
-    internal void ShowVersion()
+    public void ShowVersion()
     {
       var arguments = new[] {
         "--version"
       };
       RunCommand(string.Join(" ", arguments));
     }
-    internal List<CommitInfo> GetAllCommitStats()
+    public List<string> GetAllCommitStats()
     {
       var arguments = new[] {
         "log",
         $@"--pretty=""format:{CommitInfo.PRETTY_FORMAT}""",
         @"--shortstat",
         //@"--since=48.hour",
-        @"--no-merges"
+        //@"--no-merges",
+        //@"--first-parent"
       };
-      var results = RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
-      var commits = new List<CommitInfo>(results.Count / 2);
-      for (int i = 0; i < results.Count / 2; i++)
-      {
-        commits.Add(new CommitInfo(results[2 * i], results[2 * i + 1]));
-      }
-      return commits;
+      return RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
     }
+  }
+  internal interface IGitShell
+  {
+    void ShowVersion();
+    List<string> GetAllCommitStats();
   }
 }
