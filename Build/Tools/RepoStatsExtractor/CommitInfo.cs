@@ -18,11 +18,10 @@ namespace RepoStatsExtractor
 
     public const string PRETTY_FORMAT = "%H;%an;%ae;%ad;%cn;%ce;%cd;%d";
     public const string DATE_FORMAT = "ddd MMM d HH:mm:ss yyyy K";
-    internal CommitInfo(string description, string changes)
+    internal CommitInfo(string description, string changes = null)
     {
       var entries = description.Split(';');
       var regex = new Regex(@"(?<filesChanged>\d+) files? changed(, (?<insertions>\d+) insertions?\(\+\))?(, (?<deletions>\d+) deletions?\(-\))?");
-      var match = regex.Match(changes);
 
       commitHash = entries[0];
       authorName = entries[1];
@@ -31,11 +30,15 @@ namespace RepoStatsExtractor
       committerName = entries[4];
       committerEmail = entries[5];
       DateTime.TryParseExact(entries[6], DATE_FORMAT, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out authorDate);
-      filesChanged = int.Parse(match.Groups["filesChanged"].Value);
-      if(match.Groups["insertions"].Success)
-        insertions = int.Parse(match.Groups["insertions"].Value);
-      if (match.Groups["deletions"].Success)
-        deletions = int.Parse(match.Groups["deletions"].Value);
+      if(!string.IsNullOrEmpty(changes))
+      {
+        var match = regex.Match(changes);
+        filesChanged = int.Parse(match.Groups["filesChanged"].Value);
+        if (match.Groups["insertions"].Success)
+          insertions = int.Parse(match.Groups["insertions"].Value);
+        if (match.Groups["deletions"].Success)
+          deletions = int.Parse(match.Groups["deletions"].Value);
+      }
     }
   }
 }

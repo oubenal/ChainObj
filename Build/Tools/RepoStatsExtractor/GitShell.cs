@@ -70,19 +70,22 @@ namespace RepoStatsExtractor
         $@"--pretty=""format:{CommitInfo.PRETTY_FORMAT}""",
         @"--shortstat",
         //@"--since=48.hour",
-        @"--no-merges"
+        //@"--no-merges",
+        //@"--first-parent"
       };
       var results = RunCommand(string.Join(" ", arguments)).Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
       var commits = new List<CommitInfo>(results.Count / 2);
       for (int i = 0; i < results.Count; i++)
       {
-        if (!results[i + 1].StartsWith(" "))
+        if (!results[i + 1].StartsWith(" ")) // merge commit
         {
-          log.Warn($"No diff in commit sha1:{results[i].Split(';').First()}");
-          continue;
+          log.Debug($"No diff in commit sha1:{results[i].Split(';').First()}");
+          commits.Add(new CommitInfo(results[i]));
+        } else
+        {
+          commits.Add(new CommitInfo(results[i], results[i + 1]));
+          i++;
         }
-        commits.Add(new CommitInfo(results[i], results[i + 1]));
-        i++;
       }
       return commits;
     }
