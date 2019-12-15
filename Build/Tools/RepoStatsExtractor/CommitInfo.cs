@@ -23,19 +23,34 @@ namespace RepoStatsExtractor
 
     public const string PRETTY_FORMAT = "%H;%an;%ae;%ad;%cn;%ce;%cd;%d";
     public const string DATE_FORMAT = "ddd MMM d HH:mm:ss yyyy K";
-    internal CommitInfo(string description, string changes = null)
+    internal CommitInfo(string commitHash, string authorName, string authorEmail, DateTime authorDate, string committerName, string committerEmail, DateTime committerDate, int filesChanged, int insertions, int deletions)
+    {
+      this.commitHash = commitHash;
+      this.authorName = authorName;
+      this.authorEmail = authorEmail;
+      this.authorDate = authorDate;
+      this.committerName = committerName;
+      this.committerEmail = committerEmail;
+      this.committerDate = committerDate;
+      this.filesChanged = filesChanged;
+      this.insertions = insertions;
+      this.deletions = deletions;
+    }
+    private static CommitInfo Parse(string description, string changes = null)
     {
       var entries = description.Split(';');
       var regex = new Regex(@"(?<filesChanged>\d+) files? changed(, (?<insertions>\d+) insertions?\(\+\))?(, (?<deletions>\d+) deletions?\(-\))?");
 
-      commitHash = entries[0];
-      authorName = entries[1];
-      authorEmail = entries[2];
-      DateTime.TryParseExact(entries[3], DATE_FORMAT, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out authorDate);
-      committerName = entries[4];
-      committerEmail = entries[5];
-      DateTime.TryParseExact(entries[6], DATE_FORMAT, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out committerDate);
-      if(!string.IsNullOrEmpty(changes))
+      var commitHash = entries[0];
+      var authorName = entries[1];
+      var authorEmail = entries[2];
+      DateTime authorDate = GitDefaultTime(entries[3]);
+      var committerName = entries[4];
+      var committerEmail = entries[5];
+      DateTime committerDate = GitDefaultTime(entries[6]);
+
+      int filesChanged = 0, insertions = 0, deletions = 0;
+      if (!string.IsNullOrEmpty(changes))
       {
         var match = regex.Match(changes);
         filesChanged = int.Parse(match.Groups["filesChanged"].Value);
@@ -44,8 +59,16 @@ namespace RepoStatsExtractor
         if (match.Groups["deletions"].Success)
           deletions = int.Parse(match.Groups["deletions"].Value);
       }
+
+      return new CommitInfo(commitHash, authorName, authorEmail, authorDate, committerName, committerEmail, committerDate, filesChanged, insertions, deletions);
     }
-    
+
+    public static DateTime GitDefaultTime(string date)
+    {
+      DateTime.TryParseExact(date, DATE_FORMAT, System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var authorDate);
+      return authorDate;
+    }
+
     internal static List<CommitInfo> ParseGitShellResult(List<string> results)
     {
       var commits = new List<CommitInfo>(results.Count / 2);
@@ -54,15 +77,48 @@ namespace RepoStatsExtractor
         if (!results[i + 1].StartsWith(" ")) // merge commit
         {
           log.Debug($"No diff in commit sha1:{results[i].Split(';').First()}");
-          commits.Add(new CommitInfo(results[i]));
+          commits.Add(Parse(results[i]));
         }
         else
         {
-          commits.Add(new CommitInfo(results[i], results[i + 1]));
+          commits.Add(Parse(results[i], results[i + 1]));
           i++;
         }
       }
       return commits;
+    }
+
+    public override bool Equals(object obj)
+    {
+      return obj is CommitInfo type &&
+             commitHash == type.commitHash &&
+             authorName == type.authorName &&
+             authorEmail == type.authorEmail &&
+             authorDate == type.authorDate &&
+             committerName == type.committerName &&
+             committerEmail == type.committerEmail &&
+             committerDate == type.committerDate &&
+             filesChanged == type.filesChanged &&
+             insertions == type.insertions &&
+             deletions == type.deletions;
+    }
+    public override int GetHashCode()
+    {
+      var hashCode = -298609710;
+      hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(commitHash);
+      hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(authorName);
+      hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(authorEmail);
+      hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(committerName);
+      hashCode = hashCode * -1521134295 + EqualityComparer<string>.Default.GetHashCode(committerEmail);
+      hashCode = hashCode * -1521134295 + filesChanged.GetHashCode();
+      hashCode = hashCode * -1521134295 + insertions.GetHashCode();
+      hashCode = hashCode * -1521134295 + deletions.GetHashCode();
+      return hashCode;
+    }
+
+    public override string ToString()
+    {
+      return $"{commitHash.Substring(0, 8)} | [{authorName}] <{authorEmail}> ({authorDate})";
     }
   }
 }
