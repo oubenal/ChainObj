@@ -10,9 +10,9 @@ namespace RepoStatsExtractor
   {
     static void Main(string[] args)
     {
-      var gitShell = new GitShell(@"C:\RandD\roslyn");
+      var gitShell = new GitShell(@"C:\RandD\dotnet-standard");
       gitShell.ShowVersion();
-      gitShell.GetAllCommitStats();
+      var commits = gitShell.GetAllCommitStats();
     }
   }
 }
